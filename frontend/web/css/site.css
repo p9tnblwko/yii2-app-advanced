@@ -359,3 +359,21 @@ body{
 .catalog .grids i.active{
     color: #55a4d3;
 }
+.pagination{
+    display: table;
+    margin:23px auto 20px;
+}
+.pagination *{
+    color: #9f9f9f !important;
+    border: none !important;
+    background: none !important;
+}
+.pagination .disabled{
+    display: none;
+}
+.pagination .active a{
+    color: #55a4d3 !important;
+    border: 1px solid #55a4d3 !important;
+    border-radius: 50%;
+    background: none;
+}

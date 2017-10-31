@@ -13,6 +13,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use yii\data\Pagination;
 
 /**
  * Site controller
@@ -73,8 +74,18 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $products = Products::find()->all();
-        return $this->render('index',['products'=> $products]);
+        $products = Products::find();
+
+        $countQuery = clone $products;
+        // подключаем класс Pagination, выводим по 10 пунктов на страницу
+        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 5]);
+        // приводим параметры в ссылке к ЧПУ
+        $pages->pageSizeParam = false;
+        $products = $products->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
+
+        return $this->render('index',['products'=> $products, 'pages' => $pages]);
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
 
 /* @var $this yii\web\View */
+use yii\widgets\LinkPager;
 
 $this->title = 'Catalog';
 ?>
@@ -77,3 +78,8 @@ $this->title = 'Catalog';
 
     </div>
 </div>
+<?php
+    echo LinkPager::widget([
+    'pagination' => $pages,
+    ]);
+?>
