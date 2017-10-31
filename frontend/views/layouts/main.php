@@ -29,20 +29,19 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => Yii::$app->name,
+        'brandLabel' => Html::img('@web/img/logo.jpg',['class'=>'logo']),
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
+            'class' => '',
         ],
     ]);
     $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'About', 'url' => ['/site/about']],
-        ['label' => 'Contact', 'url' => ['/site/contact']],
+        ['label' => 'ReviewScore', 'url' => ['/']],
     ];
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
+        $menuItems[] = '<li><a href="http://techfunder-backend.dev/"><button type="button" class="btn btn-info">für händler</button></a></li>';
     } else {
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
@@ -60,7 +59,7 @@ AppAsset::register($this);
     NavBar::end();
     ?>
 
-    <div class="container">
+    <div class="container-fliud">
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
@@ -71,9 +70,17 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?></p>
+        <?= Html::img('@web/img/footer-logo.jpg',['class'=>'logo']) ?>
+        <p class="text-center">Copyright &copy; 2015 - <?= date('Y') ?> Review Bridge Research GmbH - Alle Rechte vorbehalten</p>
 
-        <p class="pull-right"><?= Yii::powered() ?></p>
+        <ul>
+            <li class="pull-left"><a href="#">Einfach.Kaufen</a></li>
+            <li class="pull-left"><a href="#">Impressum</a></li>
+            <li class="pull-left"><a href="#">Datenschutz</a></li>
+            <li class="pull-left"><a href="#">Kontakt</a></li>
+            <li class="pull-left"><a href="#">Agb Verbraucher</a></li>
+            <li class="pull-left"><a href="#">Agb Händler</a></li>
+        </ul>
     </div>
 </footer>
 

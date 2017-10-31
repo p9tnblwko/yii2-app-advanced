@@ -2,52 +2,78 @@
 
 /* @var $this yii\web\View */
 
-$this->title = 'My Yii Application';
+$this->title = 'Catalog';
 ?>
 <div class="site-index">
 
     <div class="jumbotron">
-        <h1>Congratulations!</h1>
-
-        <p class="lead">You have successfully created your Yii-powered application.</p>
-
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
-    </div>
-
-    <div class="body-content">
-
-        <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
+        <div class="search-box">
+            <p>Bewertungen lesen. Das passende Produkt finden. Bewertungen schreiben.</p>
+            <div class="search">
+                <input type="text">
+                <button><i class="fa fa-search"></i>suchen</button>
             </div>
         </div>
+    </div>
+
+    <div class="body-content catalog">
+        <div class="grids">
+            <div class="pull-right">
+            <i class="fa fa-th-list active"></i>
+            <i class="fa fa-th"></i>
+            <span>Vergleichen</span>
+            </div>
+        </div>
+        <div class="relevanz">
+            <select name="relevanz" id="relevanz" class="pull-right">
+                <option selected value="Relevanz">Relevanz</option>
+                <option value="1">Option1</option>
+                <option value="2">Option2</option>
+            </select>
+        </div>
+
+        <?php foreach ($products as $product){ ?>
+            <div class="row item">
+                <div class="col-lg-4 section">
+                    <img src="<?=$product->Picture?>" alt="item">
+                </div>
+                <div class="col-lg-4 section">
+                    <a href="#"><span class="title"><?=$product->Title?></span></a>
+                    <span class="brand">von <?=$product->Brand?></span>
+                    <div class="score">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star-half-o"></i>
+                        <i class="fa fa-star-o"></i>
+                    </div>
+                    <a href="#"><span class="val">745 Bewertungsanalysen</span></a>
+                </div>
+                <div class="col-lg-4 section">
+                    <div class="price-block pull-left col-md-6 nopadding">
+                        <span class="title bold">SEHR GUT</span>
+                        <span class="price"><?=$product->Price?> €</span>
+                        <a href="#"><span class="foot semibold">ReviewScore</span></a>
+                    </div>
+                    <div class="pull-left reviews col-md-6 nopadding">
+                        <div class="line">
+                            <a href="#"><div class="number pull-left">219<i class="fa fa-comment-o"></i></div></a>
+                            <div class="type pull-left">Akku</div>
+                        </div>
+                        <div class="line">
+                            <a href="#"><div class="number pull-left">11<i class="fa fa-comment-o"></i></div></a>
+                            <div class="type pull-left">Fingerprint</div>
+                        </div>
+                        <div class="line">
+                            <a href="#"><div class="number pull-left">16<i class="fa fa-comment-o"></i></div></a>
+                            <div class="type pull-left">Gear Vr</div>
+                        </div>
+                        <a href="#"><span class="more">20 weitere Schlüsselthemen</span></a>
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
+
 
     </div>
 </div>
