@@ -14,16 +14,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'ASIN')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'Title')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'Price')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'Picture')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'EAN')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'Brand')->textInput(['maxlength' => true]) ?>
-
     <div class="form-group">
         <?= Html::submitButton('Add', ['class' => 'btn btn-success']) ?>
     </div>

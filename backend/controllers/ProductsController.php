@@ -7,7 +7,9 @@ use backend\models\Products;
 use backend\models\ProductsSerach;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use \yii\web\HttpException;
 use yii\filters\VerbFilter;
+use backend\models\Amazon;
 
 /**
  * ProductsController implements the CRUD actions for Products model.
@@ -65,10 +67,38 @@ class ProductsController extends Controller
     {
         $model = new Products();
 
-        //
+        if ($model->load(Yii::$app->request->post())) {
+            // taking data from Amazon
+            $call = new Amazon();
+            $asin = Yii::$app->request->post('Products')['ASIN'];
+            $response = $call->getProductByASIN($asin);
+            $response = new \SimpleXMLElement($response);
+            $isValid = (bool)$response->Items->Request->IsValid;
+            $amount = (int)$response->Items->Item->OfferSummary->LowestNewPrice->Amount;
+            $amount = $amount / 100;
+            if(isset($response->Items->Item->LargeImage)){
+                $image = $response->Items->Item->LargeImage->URL[0];
+            }else{
+                $length = count($response->Items->Item->ImageSets->ImageSet);
+                $length = $length-1;
+                $image = $response->Items->Item->ImageSets->ImageSet[$length]->LargeImage->URL[0];
+            }
+            if($isValid) {
+                        $_POST['Products']['Title'] = (string)$response->Items->Item->ItemAttributes->Title;
+                        $_POST['Products']['Price'] = (string)$amount;
+                        $_POST['Products']['Picture'] = (string)$image;
+                        $_POST['Products']['EAN'] = (string)$response->Items->Item->ItemAttributes->EAN;
+                        $_POST['Products']['Brand'] = (string)$response->Items->Item->ItemAttributes->Brand;
+                Yii::$app->request->setBodyParams($_POST);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+                if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }else{
+                    throw new HttpException(500 ,'Something is wrong, please try again.');
+                }
+            }else{
+                throw new HttpException(404 ,'ASIN not found');
+            }
         }
 
         return $this->render('create', [

@@ -29,7 +29,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'ASIN',
             'Title',
             'Price',
-            'Picture',
+            [
+                'attribute' => 'image',
+                'label' => 'Picture',
+                'format' => 'html',
+                'value' => function($data, $row){
+                    return $data->Picture != "" ? '<img style="max-width:80px" src="'.$data->Picture.'">': null;
+                },
+            ],
             'EAN',
             'Brand',
 

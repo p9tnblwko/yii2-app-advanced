@@ -6,6 +6,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
+use backend\models\Amazon;
 
 /**
  * Site controller
@@ -60,7 +61,10 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $call = new Amazon();
+        $resp = $call->getProductByASIN('B005A33XBA');
+        $resp = new \SimpleXMLElement($resp);
+        return $this->render('index', ['response' => $resp]);
     }
 
     /**
