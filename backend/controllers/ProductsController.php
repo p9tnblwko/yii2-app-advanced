@@ -72,24 +72,17 @@ class ProductsController extends Controller
             $call = new Amazon();
             $asin = Yii::$app->request->post('Products')['ASIN'];
             $response = $call->getProductByASIN($asin);
-            $response = new \SimpleXMLElement($response);
-            $isValid = (bool)$response->Items->Request->IsValid;
-            $amount = (int)$response->Items->Item->OfferSummary->LowestNewPrice->Amount;
-            $amount = $amount / 100;
-            if(isset($response->Items->Item->LargeImage)){
-                $image = $response->Items->Item->LargeImage->URL[0];
-            }else{
-                $length = count($response->Items->Item->ImageSets->ImageSet);
-                $length = $length-1;
-                $image = $response->Items->Item->ImageSets->ImageSet[$length]->LargeImage->URL[0];
-            }
-            if($isValid) {
-                        $_POST['Products']['Title'] = (string)$response->Items->Item->ItemAttributes->Title;
-                        $_POST['Products']['Price'] = (string)$amount;
-                        $_POST['Products']['Picture'] = (string)$image;
-                        $_POST['Products']['EAN'] = (string)$response->Items->Item->ItemAttributes->EAN;
-                        $_POST['Products']['Brand'] = (string)$response->Items->Item->ItemAttributes->Brand;
-                Yii::$app->request->setBodyParams($_POST);
+
+            if($response['isValid']) {
+                $csrf = Yii::$app->request->post('_csrf-backend');
+                $asin = Yii::$app->request->post('Products')['ASIN'];
+                $body = array(
+                    '_csrf-backend' => $csrf,
+                    'Products' => $response['Products'],
+                );
+                $body['Products']['ASIN'] = $asin;
+                print_r($body);
+                Yii::$app->request->setBodyParams($body);
 
                 if ($model->load(Yii::$app->request->post()) && $model->save()) {
                     return $this->redirect(['view', 'id' => $model->id]);

@@ -61,10 +61,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $call = new Amazon();
-        $resp = $call->getProductByASIN('B005A33XBA');
-        $resp = new \SimpleXMLElement($resp);
-        return $this->render('index', ['response' => $resp]);
+        return $this->render('index');
     }
 
     /**

@@ -11,11 +11,11 @@ namespace backend\models;
 
 class Amazon
 {
+    const AMAZON_URL = 'http://webservices.amazon.de/onca/xml?';
 
     function getProductByASIN($asin){
         date_default_timezone_set('UTC');
 
-        $url = 'http://webservices.amazon.de/onca/xml?';
         $ch = curl_init();
         $secret = 'AKIAIN4I5FALO4URFNSA';
 
@@ -38,14 +38,35 @@ class Amazon
         $sig = base64_encode($sig);
         $data['Signature'] = $sig;
 
-        curl_setopt($ch, CURLOPT_URL, $url . http_build_query($data));
+        curl_setopt($ch, CURLOPT_URL, self::AMAZON_URL . http_build_query($data));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
 
         $response = curl_exec($ch);
-        //$xml=simplexml_load_string($response);
 
-        return $response;
+        $response = new \SimpleXMLElement($response);
+        $isValid = (bool)$response->Items->Request->IsValid;
+        $amount = (int)$response->Items->Item->OfferSummary->LowestNewPrice->Amount;
+        $amount = $amount / 100;
+        if(isset($response->Items->Item->LargeImage)){
+            $image = $response->Items->Item->LargeImage->URL[0];
+        }else{
+            $image = $response->Items->Item->ImageSets->ImageSet;
+            $image = end($image)->LargeImage->URL[0];
+        }
+
+        $data = array(
+            'isValid' => $isValid,
+            'Products' => array(
+                'Title' => (string)$response->Items->Item->ItemAttributes->Title,
+                'Price' => (string)$amount,
+                'Picture' => (string)$image,
+                'EAN' => (string)$response->Items->Item->ItemAttributes->EAN,
+                'Brand' => (string)$response->Items->Item->ItemAttributes->Brand,
+            ),
+        );
+
+        return $data;
     }
 
 }
